@@ -5,5 +5,6 @@ from . import views
 
 urlpatterns = [
     # ADDING DYNAMIC PATH
-    path("<month>", views.mycard)
+    path("<int:month>", views.mycard_in_numbers),
+    path("<str:month>", views.mycard)
 ]
