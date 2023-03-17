@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 mycards = {
   'january': 'January is for setting goals and practicing meditation',
@@ -50,8 +51,10 @@ def mycard_in_numbers(request, month):
 def mycard(request, month):
   try:
     card_text = mycards[month]
-    response_data = f"<h1>{card_text}</h1"
+    # response_data = f"<h1>{card_text}</h1"
+    response_data = render_to_string("cardom/card.html")
     
     return HttpResponse(response_data)
   except: 
     return HttpResponseNotFound('<h1>This is not a valid month at the moment.</h1>')
+
