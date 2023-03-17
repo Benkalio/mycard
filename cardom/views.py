@@ -1,5 +1,6 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 mycards = {
   'january': 'January is for setting goals and practicing meditation',
@@ -19,12 +20,24 @@ mycards = {
 # Create your views here.
 
 def mycard_in_numbers(request, month):
-  return HttpResponse(month)
+  months = list(mycards.keys())
+  
+  if month > len(months):
+    return HttpResponseNotFound("Invalid month")
+    
+  redirect_month = months[month -1]
+  
+  #build a path with /cardom/january
+  redirect_path = reverse("card-month", args=[redirect_month])
+  
+  return HttpResponseRedirect(redirect_path)
 
 
 def mycard(request, month):
   try:
     card_text = mycards[month]
-    return HttpResponse(card_text)
+    response_data = f"<h1>{card_text}</h1"
+    
+    return HttpResponse(response_data)
   except: 
-    return HttpResponseNotFound('This is not a valid month at the moment.')
+    return HttpResponseNotFound('<h1>This is not a valid month at the moment.</h1>')
